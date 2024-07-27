@@ -1,0 +1,41 @@
+{% extends "restaurant/base.html" %}
+
+{% block title %}Add Comment{% endblock %}
+
+{% block content %}
+<style>
+.form-control.rounded-input {
+    border-radius: 15px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    width: 100%;
+}
+.btn-success {
+    border-radius: 15px;
+}
+</style>
+
+<div class="container mt-4">
+    <h2>Add Comment for Review by {{ review.user.username }}</h2>
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="card shadow rounded-lg p-4">
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="font-weight-bold">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-success rounded-pill">Add Comment</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

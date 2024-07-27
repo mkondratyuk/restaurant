@@ -1,0 +1,39 @@
+{% extends "restaurant/base.html" %}
+
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+
+{% block content %}
+
+<style>
+    .form-control.rounded-input {
+    border-radius: 15px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    width: 100%;
+}
+
+</style>
+<div class="container mt-4">
+    <div class="card shadow rounded-lg">
+        <div class="card-body">
+            <h2 class="card-title">Profile</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'img/default_profile.png' %}{% endif %}" alt="Profile Picture" class="img-fluid rounded-circle">
+                </div>
+                <div class="col-md-8">
+                    <h4>{{ user.get_full_name }}</h4>
+                    <p>{{ user.email }}</p>
+                    <p>Member since: {{ user.date_joined|date:"F d, Y" }}</p>
+                    <p>Bio: {% if user.profile.bio %}{{ user.profile.bio }}{% else %}<em>No bio available</em>{% endif %}</p>
+                    <a href="{% url 'edit_profile' %}" class="btn btn-success btn-sm mt-2 rounded-pill">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

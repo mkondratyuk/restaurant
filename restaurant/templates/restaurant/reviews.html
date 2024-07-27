@@ -1,0 +1,40 @@
+{% extends "restaurant/base.html" %}
+
+{% block title %}Reviews{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Reviews</h2>
+    <ul class="list-group">
+        {% for review in reviews %}
+        <li class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <p>{{ review.user.username }} rated {{ review.rating }}/5:</p>
+                    <p>{{ review.comment }}</p>
+                    <p>{{ review.dish }}</p>
+                    <p><strong>By: {{ review.user.username }}</strong></p>
+                </div>
+                <div>
+                    <a href="{% url 'add_comment' review_id=review.id %}" class="btn btn-success btn-sm mt-2">Add Comment</a>
+                </div>
+            </div>
+            <ul class="list-group mt-3">
+                {% for comment in review.comments.all %}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p>{{ comment.text }}</p>
+                            <p><strong>By: {{ comment.user.username }}</strong></p>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% endblock %}

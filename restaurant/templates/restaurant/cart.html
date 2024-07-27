@@ -1,0 +1,56 @@
+{% extends "restaurant/base.html" %}
+
+{% block title %}Cart{% endblock %}
+
+{% block extrahead %}
+<style>
+    /* Additional styles specific to your cart page */
+    .container {
+        margin-top: 50px;
+    }
+    .list-group-item {
+        border-color: #ddd;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    .list-group-item span {
+        font-weight: bold;
+    }
+    .btn-success {
+        font-weight: bold;
+        border-radius: 5px;
+    }
+    .btn-success:hover {
+        opacity: 0.8;
+    }
+    .alert-info {
+        background-color: #f0f0f0;
+        border-color: #ddd;
+        color: #333;
+        border-radius: 5px;
+        padding: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Your Cart</h2>
+    {% if order_items %}
+        <ul class="list-group mb-4">
+            {% for item in order_items %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ item.dish.name }} (x{{ item.quantity }})
+                <span>${{ item.dish.price|floatformat:2 }} x {{ item.quantity }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <p class="h4">Total Price: ${{ total_price|floatformat:2 }}</p>
+        <a href="{% url 'place_order' %}" class="btn btn-success btn-sm mt-2">Place Order</a>
+    {% else %}
+        <p class="alert alert-info">Your cart is empty.</p>
+    {% endif %}
+</div>
+
+
+{% endblock %}

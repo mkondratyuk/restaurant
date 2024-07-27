@@ -1,0 +1,26 @@
+{% extends "restaurant/base.html" %}
+
+{% block title %}Order Confirmation{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Order Confirmation</h2>
+    <div class="alert alert-success" role="alert">
+        Thank you for your order! Here are the details:
+    </div>
+    <ul class="list-group mb-4">
+        {% for item in order.items.all %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>{{ item.dish.name }} (x{{ item.quantity }})</span>
+            <span>${{ item.dish.price|floatformat:2 }} each</span>
+        </li>
+        {% endfor %}
+    </ul>
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>Total Price:</strong> ${{ total_price|floatformat:2 }}</p>
+    <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
+    <p><strong>Contact Info:</strong> {{ order.contact_info }}</p>
+    <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+    <a href="{% url 'repeat_order' order.id %}" class="btn btn-success btn-sm mt-2">Repeat Order</a>
+</div>
+{% endblock %}

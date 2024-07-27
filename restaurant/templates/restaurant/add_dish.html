@@ -1,0 +1,47 @@
+{% extends "restaurant/base.html" %}
+
+{% block title %}Add Dish{% endblock %}
+
+{% block content %}
+<style>
+.form-control.rounded-input {
+    border-radius: 15px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    width: 100%;
+}
+.btn-success {
+    border-radius: 15px;
+}
+</style>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Add Dish</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="card shadow rounded-lg p-4">
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                {% if field.name != 'new_category' %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}" class="font-weight-bold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in field.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="form-group">
+                <label for="id_new_category" class="font-weight-bold">New Category (Optional)</label>
+                <input type="text" name="new_category" class="form-control rounded-input" id="id_new_category" placeholder="Enter new category">
+            </div>
+            <button type="submit" class="btn btn-success rounded-pill">Add Dish</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
