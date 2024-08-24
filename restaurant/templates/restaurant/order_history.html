@@ -3,67 +3,133 @@
 {% block title %}Order History{% endblock %}
 
 {% block extrahead %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/css/lightbox.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
 <style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
     .container {
         margin-top: 50px;
     }
-    .list-group-item {
-        border-color: #ddd;
-        border-radius: 5px;
-        margin-bottom: 10px;
-    }
-    .list-group-item span {
+
+    h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        color: #28a745;
         font-weight: bold;
+        text-align: center;
+        margin-bottom: 30px;
     }
-    .btn-success {
-        font-weight: bold;
-        border-radius: 5px;
-    }
-    .btn-success:hover {
-        opacity: 0.8;
-    }
-    .alert-info {
-        background-color: #f0f0f0;
-        border-color: #ddd;
-        color: #333;
-        border-radius: 5px;
-        padding: 10px;
-    }
+
     .card {
-        border-radius: 10px;
-        border-color: #ddd;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+        margin: 20px 0;
     }
+
     .card-header {
-        background-color: #f8f9fa;
-        border-bottom: 1px solid #ddd;
-        border-radius: 10px 10px 0 0;
+        background-color: #28a745;
+        color: #fff;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 20px 20px 0 0;
+        padding: 15px;
     }
-    .card-title {
-        margin-bottom: 0;
+
+    .card-body {
+        padding: 20px;
     }
+
+    .accordion-button {
+        font-weight: bold;
+        color: #28a745;
+        text-align: left;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        padding: 10px;
+        border-radius: 20px;
+        transition: background 0.3s ease;
+    }
+
+    .accordion-button:hover {
+        background-color: #e9ecef;
+    }
+
+    .accordion-button:not(.collapsed) {
+        color: #28a745;
+        background-color: #e9ecef;
+    }
+
+    .btn-success {
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+        border-radius: 50px;
+        padding: 10px 20px;
+        background: linear-gradient(45deg, #28a745, #218838);
+        transition: transform 0.3s ease, background 0.3s ease;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-success:hover {
+        background: linear-gradient(45deg, #218838, #1e7e34);
+        transform: scale(1.05);
+    }
+
+    .list-group-item {
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        background: #fff;
+    }
+
     .badge-pill {
         border-radius: 50px;
+        background-color: #28a745;
+        color: #fff;
+        padding: 5px 10px;
+    }
+
+    .alert-info {
+        background-color: #e9ecef;
+        border-color: #ddd;
+        color: #333;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Your Order History</h2>
-    
+<div class="container">
+    <h2>Your Order History</h2>
+
     {% if orders %}
         <div class="row mb-4">
             <div class="col-md-6">
-                <div class="card shadow-sm rounded">
-                    <div class="card-header bg-success text-white rounded-top">
-                        <h5 class="card-title mb-0">Most Ordered Dishes</h5>
+                <div class="card animate__animated animate__fadeIn">
+                    <div class="card-header">
+                        Most Ordered Dishes
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
                             {% for dish in most_ordered_dishes %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 {{ dish.dish__name }}
-                                <span class="badge badge-success badge-pill">{{ dish.count }}</span>
+                                <span class="badge badge-pill">{{ dish.count }}</span>
                             </li>
                             {% endfor %}
                         </ul>
@@ -71,9 +137,9 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card shadow-sm rounded">
-                    <div class="card-header bg-success text-white rounded-top">
-                        <h5 class="card-title mb-0">Total Spendings</h5>
+                <div class="card animate__animated animate__fadeIn">
+                    <div class="card-header">
+                        Total Spendings
                     </div>
                     <div class="card-body">
                         <h3 class="card-text text-center">${{ total_spent|floatformat:2 }}</h3>
@@ -81,16 +147,14 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="accordion" id="orderHistoryAccordion">
             {% for order in orders %}
-            <div class="card shadow-sm rounded mb-3">
-                <div class="card-header" id="heading{{ order.id }}">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link text-dark" type="button" data-toggle="collapse" data-target="#collapse{{ order.id }}" aria-expanded="true" aria-controls="collapse{{ order.id }}">
-                            Order #{{ order.id }} - {{ order.created_at|date:"d M Y H:i" }} - ${{ order.total_price|floatformat:2 }}
-                        </button>
-                    </h5>
+            <div class="card animate__animated animate__fadeIn mb-3">
+                <div class="card-header">
+                    <button class="btn btn-link accordion-button" type="button" data-toggle="collapse" data-target="#collapse{{ order.id }}" aria-expanded="true" aria-controls="collapse{{ order.id }}">
+                        Order #{{ order.id }} - {{ order.created_at|date:"d M Y H:i" }} - ${{ order.total_price|floatformat:2 }}
+                    </button>
                 </div>
                 <div id="collapse{{ order.id }}" class="collapse" aria-labelledby="heading{{ order.id }}" data-parent="#orderHistoryAccordion">
                     <div class="card-body">

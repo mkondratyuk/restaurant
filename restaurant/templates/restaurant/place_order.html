@@ -2,25 +2,98 @@
 
 {% block title %}Place Order{% endblock %}
 
-{% block content %}
+{% block extrahead %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/css/lightbox.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
 <style>
-    .form-control.rounded-input {
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+
+    h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        color: #28a745;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        border-radius: 20px;
+        border-color: #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        background: #fff;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
         border-radius: 15px;
-        padding: 10px;
+        padding: 12px 15px;
         border: 1px solid #ced4da;
-        width: 100%;
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 8px rgba(128, 189, 255, 0.5);
+    }
+
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .btn-success {
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+        border-radius: 30px;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: #fff;
+        transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 14px;
     }
 </style>
+{% endblock %}
 
-<div class="container mt-4">
-    <h2 class="mb-4">Place Order</h2>
+{% block content %}
+<div class="container">
+    <h2>Place Order</h2>
     <form method="POST">
         {% csrf_token %}
-        <div class="card shadow rounded-lg p-4">
+        <div class="card">
             {{ form.non_field_errors }}
             {% for field in form %}
                 <div class="form-group">
-                    <label for="{{ field.id_for_label }}" class="font-weight-bold">{{ field.label }}</label>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field }}
                     {% if field.errors %}
                         <div class="invalid-feedback d-block">
@@ -31,7 +104,7 @@
                     {% endif %}
                 </div>
             {% endfor %}
-            <button type="submit" class="btn btn-success rounded-pill">Place Order</button>
+            <button type="submit" class="btn btn-success">Place Order</button>
         </div>
     </form>
 </div>

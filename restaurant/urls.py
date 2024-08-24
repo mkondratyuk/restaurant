@@ -32,6 +32,4 @@ urlpatterns = [
     path('orders/repeat/<int:order_id>/', views.repeat_order, name='repeat_order'),
     path('dishes/autocomplete/', DishesAutocompleteView.as_view(), name='dishes_autocomplete'),
 
-
-
 ]

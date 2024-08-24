@@ -1,115 +1,140 @@
 {% extends "restaurant/base.html" %}
 
 {% block title %}Menu{% endblock %}
+{% load static %}
 
 {% block extrahead %}
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/css/lightbox.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
 <style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
     .container {
         margin-top: 50px;
     }
-    .card {
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        background: linear-gradient(to bottom, #ffffff, #f1f1f1);
-    }
-    .card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    }
-    .card-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.8rem;
-        color: #333;
-        font-weight: bold;
-    }
-    .card-text {
-        font-family: 'Roboto', sans-serif;
-        color: #555;
-        font-size: 1.1rem;
-    }
-    .btn-success, .btn-warning, .btn-danger, .btn-primary {
-        font-family: 'Roboto', sans-serif;
-        font-weight: bold;
-        border-radius: 5px;
-        transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
-    }
-    .btn-success:hover, .btn-warning:hover, .btn-danger:hover, .btn-primary:hover {
-        opacity: 0.8;
-        transform: scale(1.05);
-    }
-    .text-center {
-        text-align: center;
-    }
+
     .filter-form {
         display: flex;
         flex-wrap: wrap;
         gap: 15px;
         margin-bottom: 20px;
         align-items: center;
+        justify-content: center;
     }
+
     .filter-form select, .filter-form input {
         flex: 1;
         min-width: 150px;
         max-width: 220px;
+        border-radius: 30px;
     }
+
     .filter-form button {
         flex: none;
+        border-radius: 30px;
+        background-color: #28a745;
+        color: #fff;
     }
-    .star-rating {
-        font-size: 26px;
-        display: flex;
-        justify-content: center;
-        margin: 10px 0;
+
+    .filter-form button:hover {
+        background-color: #218838;
     }
-    .star {
-        color: #ccc;
-        transition: color 0.3s;
-        cursor: pointer;
+
+    h2 {
+        font-family: 'Playfair Display', serif;
+        font-weight: bold;
+        text-align: center;
+        color: #28a745;
     }
-    .star.filled {
-        color: #f8b739;
+
+    .card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        background: #fff;
+        margin: 20px;
     }
-    .star.half-filled:before {
-        content: '\2605';
-        position: absolute;
-        color: #f8b739;
-        -webkit-text-stroke: 1px #f8b739;
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
+
+    .card-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: #333;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .card-text {
+        font-family: 'Roboto', sans-serif;
+        color: #555;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .btn-success, .btn-warning, .btn-danger, .btn-primary {
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+        border-radius: 30px;
+        background-color: #28a745;
+        color: #fff;
+        transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    .btn-success:hover, .btn-warning:hover, .btn-danger:hover, .btn-primary:hover {
+        opacity: 0.9;
+        transform: translateY(-5px);
+    }
+
     .card-img-top {
         object-fit: cover;
         height: 220px;
         width: 100%;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
         transition: transform 0.3s ease-in-out;
     }
+
     .card:hover .card-img-top {
         transform: scale(1.1);
     }
+
+    .star-rating {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .star {
+        width: 24px;
+        height: 24px;
+        margin-right: 2px;
+    }
+
     .carousel-item {
         padding: 20px;
-        background-color: #f8f9fa;
-        border-radius: 10px;
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
         transition: transform 0.3s ease-in-out;
     }
+
     .carousel-item:hover {
         transform: scale(1.05);
     }
-    .carousel-item h5 {
-        color: #28a745;
-        font-weight: bold;
-    }
-    .carousel-control-prev,
-    .carousel-control-next {
-        width: 5%;
-        height: 100%;
-    }
+
     .carousel-control-prev-icon,
     .carousel-control-next-icon {
         background-color: #28a745;
@@ -117,41 +142,36 @@
         width: 40px;
         height: 40px;
     }
-    .carousel-control-prev {
-        left: 0;
-        margin-left: 10px;
-    }
-    .carousel-control-next {
-        right: 0;
-        margin-right: 10px;
-    }
+
     .about-section, .contact-section {
         padding: 50px 20px;
-        background-color: #f8f9fa;
-        border-radius: 10px;
+        background-color: #fff;
+        border-radius: 20px;
         margin-top: 50px;
-        transition: background-color 0.3s ease-in-out;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
+
     .about-section:hover, .contact-section:hover {
         background-color: #e9ecef;
     }
+
     .about-section img {
         max-width: 100%;
-        border-radius: 10px;
+        border-radius: 20px;
         transition: transform 0.3s ease-in-out;
     }
+
     .about-section img:hover {
         transform: scale(1.05);
     }
-    .animate__animated.animate__fadeIn {
-        animation-duration: 2s;
-    }
+
     .map-container {
         margin-top: 40px;
-        border-radius: 10px;
+        border-radius: 20px;
         overflow: hidden;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
+
 </style>
 {% endblock %}
 
@@ -170,24 +190,31 @@
         <button class="btn btn-success btn-sm mt-2" type="submit">Filter</button>
     </form>
 
-    <h2 class="mb-4 text-center" style="font-family: 'Playfair Display', serif; font-weight: bold;">Menu</h2>
+    <h2 class="mb-4">Menu</h2>
     <div class="row">
         {% for dish in dishes %}
         <div class="col-md-4 mb-4 animate__animated animate__fadeIn">
             <div class="card">
                 {% if dish.image %}
+                <a href="{{ dish.image.url }}" data-lightbox="dish-gallery">
                     <img src="{{ dish.image.url }}" class="card-img-top" alt="{{ dish.name }}">
+                </a>
                 {% endif %}
                 <div class="card-body">
                     <h3 class="card-title">{{ dish.name }}</h3>
                     <p class="card-text">{{ dish.description }}</p>
                     <p class="card-text">Ingredients: {{ dish.ingredients }}</p>
                     <p class="card-text">Price: ${{ dish.price }}</p>
-                    <div class="star-rating" data-rating="{{ dish.average_rating }}">
-                        {% for i in 1..5 %}
-                            <span class="star {% if i <= dish.average_rating %}filled{% else %}half-filled{% endif %}">&#9733;</span>
+                    <div class="star-rating">
+                        {% for i in "12345" %}
+                            {% if i|add:"0" <= dish.average_rating %}
+                                <img src="{% static 'stars/full.png' %}" alt="Full Star" class="star">
+                            {% else %}
+                                <img src="{% static 'stars/empty.png' %}" alt="Empty Star" class="star">
+                            {% endif %}
                         {% endfor %}
                     </div>
+                    
                     {% if user.is_staff %}
                         <a href="{% url 'edit_dish' dish.id %}" class="btn btn-success btn-sm mt-2">Edit</a>
                         <a href="{% url 'delete_dish' dish.id %}" class="btn btn-success btn-sm mt-2">Delete</a>
@@ -224,56 +251,28 @@
         </a>
     </div>
 
-    <section id="about" class="about-section mt-5 animate__animated animate__fadeIn">
+    <div class="about-section mt-5">
         <h2>About Us</h2>
-        <p>Welcome to our restaurant, where we serve delicious dishes made from the freshest ingredients. Our chefs are dedicated to creating an unforgettable dining experience for you.</p>
-    </section>
+        <p>Welcome to our restaurant, where we serve the finest dishes crafted with the freshest ingredients.</p>
+    </div>
 
-    <section id="contact" class="contact-section mt-5 animate__animated animate__fadeIn">
-        <h2>Contact Us</h2>
-        <p>If you have any questions or need more information, feel free to reach out to us.</p>
-        <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5445.836068595627!2d30.513108601424936!3d50.44908013133884!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4ce59e3ab65a7%3A0x694b8565cab02eaf!2z0JfQvtC70L7RgtGWINCy0L7RgNC-0YLQsA!5e0!3m2!1suk!2sua!4v1722023283675!5m2!1suk!2sua" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-        <p>Follow us on social media:</p>
-        <a href="https://facebook.com" class="btn btn-success rounded-pill">Facebook</a>
-        <a href="https://twitter.com" class="btn btn-success rounded-pill">Twitter</a>
-        <a href="https://instagram.com" class="btn btn-success rounded-pill">Instagram</a>
-    </section>
+    <div class="map-container mt-5">
+        <h2>Find Us Here</h2>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509639!2d144.95373631549565!3d-37.81720974202116!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d43c08fb3bb%3A0xfb0b27efc2d9e6f0!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1605325612641!5m2!1sen!2sau" width="100%" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    </div>
 </div>
+
 {% endblock %}
 
-{% block extrascript %}
+{% block extrajs %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/js/lightbox.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('.select2').select2();
-    });
-
-    $('.star-rating').each(function() {
-        let rating = parseFloat($(this).attr('data-rating'));
-        let stars = $(this).children('.star');
-        for (let i = 0; i < 5; i++) {
-            if (i < Math.floor(rating)) {
-                $(stars[i]).addClass('filled');
-            } else if (i === Math.floor(rating) && rating % 1 !== 0) {
-                $(stars[i]).addClass('half-filled');
-            }
-        }
-    });
-
-    function initMap() {
-        var restaurantLocation = {lat: 50.449080, lng: 30.513109};
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 15,
-            center: restaurantLocation
+        $('.select2').select2({
+            placeholder: "Select a category",
+            allowClear: true
         });
-        var marker = new google.maps.Marker({
-            position: restaurantLocation,
-            map: map
-        });
-    }
-    initMap();
+    });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/typeahead.js@0.11.1/dist/typeahead.bundle.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 {% endblock %}

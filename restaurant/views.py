@@ -36,7 +36,7 @@ def register(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
-@login_required
+
 def menu(request):
     query = request.GET.get('q')
     category_id = request.GET.get('category')
@@ -308,3 +308,4 @@ class DishesAutocompleteView(View):
         dishes = Dish.objects.filter(name__icontains=query).values('id', 'name')
         results = list(dishes)
         return JsonResponse(results, safe=False)
+    

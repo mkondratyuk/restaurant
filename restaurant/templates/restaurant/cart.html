@@ -1,41 +1,91 @@
 {% extends "restaurant/base.html" %}
 
 {% block title %}Cart{% endblock %}
+{% load static %}
 
 {% block extrahead %}
+<link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/css/lightbox.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
 <style>
-    /* Additional styles specific to your cart page */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
     .container {
         margin-top: 50px;
     }
-    .list-group-item {
-        border-color: #ddd;
-        border-radius: 5px;
-        margin-bottom: 10px;
+
+    h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        color: #28a745;
+        margin-bottom: 30px;
     }
+
+    .list-group-item {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+        margin: 20px 0;
+        padding: 20px;
+    }
+
+    .list-group-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
     .list-group-item span {
         font-weight: bold;
+        color: #28a745;
     }
+
     .btn-success {
+        font-family: 'Roboto', sans-serif;
         font-weight: bold;
-        border-radius: 5px;
+        border-radius: 50px;
+        padding: 10px 20px;
+        background: linear-gradient(45deg, #28a745, #218838);
+        transition: transform 0.3s ease, background 0.3s ease;
+        color: #fff;
+        border: none;
     }
+
     .btn-success:hover {
-        opacity: 0.8;
+        background: linear-gradient(45deg, #218838, #1e7e34);
+        transform: scale(1.05);
     }
+
     .alert-info {
-        background-color: #f0f0f0;
+        background-color: #e9ecef;
         border-color: #ddd;
         color: #333;
-        border-radius: 5px;
-        padding: 10px;
+        border-radius: 15px;
+        padding: 20px;
+        font-family: 'Roboto', sans-serif;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .h4 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        margin-top: 20px;
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Your Cart</h2>
+    <h2>Your Cart</h2>
     {% if order_items %}
         <ul class="list-group mb-4">
             {% for item in order_items %}
@@ -51,6 +101,8 @@
         <p class="alert alert-info">Your cart is empty.</p>
     {% endif %}
 </div>
+{% endblock %}
 
-
+{% block extrajs %}
+<script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/js/lightbox.min.js"></script>
 {% endblock %}

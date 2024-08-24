@@ -2,25 +2,107 @@
 
 {% block title %}Order Confirmation{% endblock %}
 
+{% block extrahead %}
+<style>
+    .container {
+        margin-top: 50px;
+    }
+
+    .card {
+        border-radius: 15px;
+        border-color: #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #ddd;
+        border-radius: 15px 15px 0 0;
+        padding: 10px 20px;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        font-weight: bold;
+        text-align: center;
+
+    }
+
+    .list-group-item {
+        border-color: #ddd;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 15px;
+    }
+
+    .list-group-item span {
+        font-weight: bold;
+    }
+
+    .btn-success {
+        font-weight: bold;
+        border-radius: 15px;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+
+    .alert-success {
+        background-color: #dff0d8;
+        border-color: #d0e9c6;
+        color: #3c763d;
+        border-radius: 15px;
+        padding: 15px;
+    }
+
+    .detail-section {
+        margin-bottom: 20px;
+    }
+
+    .detail-section p {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .detail-section p strong {
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Order Confirmation</h2>
-    <div class="alert alert-success" role="alert">
-        Thank you for your order! Here are the details:
+    <div class="card shadow-sm rounded">
+        <div class="card-header bg-success text-white rounded-top">
+            <h2 class="mb-0">Order Confirmation</h2>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success" role="alert">
+                Thank you for your order! Here are the details:
+            </div>
+            <ul class="list-group mb-4">
+                {% for item in order.items.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ item.dish.name }} (x{{ item.quantity }})</span>
+                    <span>${{ item.dish.price|floatformat:2 }} each</span>
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="detail-section">
+                <p><strong>Order ID:</strong> {{ order.id }}</p>
+                <p><strong>Total Price:</strong> ${{ total_price|floatformat:2 }}</p>
+                <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
+                <p><strong>Contact Info:</strong> {{ order.contact_info }}</p>
+                <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+            </div>
+            <a href="{% url 'repeat_order' order.id %}" class="btn btn-success btn-sm mt-2">Repeat Order</a>
+        </div>
     </div>
-    <ul class="list-group mb-4">
-        {% for item in order.items.all %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span>{{ item.dish.name }} (x{{ item.quantity }})</span>
-            <span>${{ item.dish.price|floatformat:2 }} each</span>
-        </li>
-        {% endfor %}
-    </ul>
-    <p><strong>Order ID:</strong> {{ order.id }}</p>
-    <p><strong>Total Price:</strong> ${{ total_price|floatformat:2 }}</p>
-    <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
-    <p><strong>Contact Info:</strong> {{ order.contact_info }}</p>
-    <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
-    <a href="{% url 'repeat_order' order.id %}" class="btn btn-success btn-sm mt-2">Repeat Order</a>
 </div>
 {% endblock %}

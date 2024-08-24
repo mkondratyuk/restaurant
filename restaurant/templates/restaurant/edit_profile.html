@@ -3,53 +3,86 @@
 
 {% block title %}Edit Profile{% endblock %}
 
+{% block content %}
 <style>
     .container {
         margin-top: 50px;
     }
+
     form {
         background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        transition: box-shadow 0.3s ease;
     }
+
+    form:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
     .btn-primary {
-        font-family: 'Roboto', sans-serif;
+        border-radius: 50px;
         font-weight: bold;
-        border-radius: 5px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        transition: background-color 0.3s ease, transform 0.3s ease;
     }
+
     .btn-primary:hover {
-        opacity: 0.8;
+        background-color: #0056b3;
+        transform: scale(1.05);
     }
+
     .profile-picture {
         width: 150px;
         height: 150px;
         object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 10px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-picture:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-control-file {
+        border-radius: 15px;
+        border: 1px solid #ced4da;
+        padding: 10px;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control-file:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
 </style>
 
-{% block content %}
 <div class="container mt-4">
     <div class="card p-4 shadow-sm">
         <h2 class="mb-4">Edit Profile</h2>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
             <div class="form-group">
-                {% if profile.profile_picture %}
-                <img src="{{ profile.profile_picture.url }}" class="profile-picture" alt="Profile Picture">
+                {% if user.profile.profile_picture %}
+                <img src="{{ user.profile.profile_picture.url }}" class="profile-picture" alt="Profile Picture">
                 {% else %}
-                <img src="{% static 'default_profile.jpg' %}" class="profile-picture" alt="Default Profile Picture">
+                <img src="{% static 'img/default_profile.jpg' %}" class="profile-picture" alt="Default Profile Picture">
                 {% endif %}
             </div>
+            {{ form.as_p }}
             <div class="form-group">
                 <label for="id_profile_picture">Profile Picture:</label>
                 <input type="file" class="form-control-file" id="id_profile_picture" name="profile_picture">
             </div>
-            <button type="submit" class="btn btn-success btn-sm mt-2" >Save</button>
+            <button type="success" class="btn btn-primary btn-sm mt-2">Save</button>
         </form>
     </div>
 </div>
+
 {% endblock %}
