@@ -18,7 +18,7 @@ class Dish(models.Model):
     available = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='dish_images/', null=True, blank=True)
-    rating = models.FloatField(default=0.0)  # New field for average rating
+    rating = models.FloatField(default=0.0) 
 
     def average_rating(self):
         return self.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
@@ -44,12 +44,11 @@ class Order(models.Model):
     def duplicate_order(self):
         new_order = Order.objects.create(
             user=self.user,
-            confirmed=False,  # New order is not confirmed
-            total_price=self.total_price,  # Keep the same total price
-            created_at=timezone.now()  # Set current creation time
+            confirmed=False, 
+            total_price=self.total_price, 
+            created_at=timezone.now()
         )
 
-        # Copy order items
         for item in self.order_items.all():
             OrderItem.objects.create(
                 order=new_order,

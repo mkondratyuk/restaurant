@@ -22,7 +22,7 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Profile.objects.create(user=user)  # Create a profile for the new user
+            Profile.objects.create(user=user)
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
@@ -84,12 +84,10 @@ def add_to_cart(request, dish_id):
     user = request.user
     dish = get_object_or_404(Dish, id=dish_id)
     
-    # Get or create an unconfirmed order for the user
     order = Order.objects.filter(user=user, confirmed=False).first()
     if not order:
         order = Order.objects.create(user=user)
 
-    # Check if the dish is already in the order
     order_item, created = OrderItem.objects.get_or_create(order=order, dish=dish)
     if not created:
         order_item.quantity += 1
@@ -149,12 +147,11 @@ def write_review(request, dish_id):
             review.dish = dish
             review.save()
             
-            # Calculate and update average rating for the dish
             average_rating = dish.reviews.aggregate(Avg('rating'))['rating__avg']
             if average_rating is not None:
                 dish.rating = round(average_rating)
             else:
-                dish.rating = 0  # or any default value you prefer
+                dish.rating = 0 
             dish.save()
 
             return redirect('menu')
@@ -191,7 +188,7 @@ def edit_dish(request, dish_id):
         form = DishForm(request.POST, request.FILES, instance=dish)
         if form.is_valid():
             dish = form.save(commit=False)
-            dish.category_id = form.cleaned_data['category'].id  # Призначення category_id перед збереженням
+            dish.category_id = form.cleaned_data['category'].id
             dish.save()
             return redirect('menu')
     else:
@@ -246,7 +243,7 @@ def add_comment(request, review_id):
             comment.user = request.user
             comment.review = review
             comment.save()
-            return redirect('reviews')  # Повертаємо користувача на сторінку з відгуками після додавання коментаря
+            return redirect('reviews')
     else:
         form = CommentForm()
     return render(request, 'restaurant/add_comment.html', {'form': form, 'review': review})

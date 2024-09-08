@@ -2,8 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
 from django.urls import path, include
-from django.views.generic import TemplateView  # Додайте цей рядок
-from .views import  DishesAutocompleteView  # Переконайтеся, що імплементуєте відповідні view
+from .views import  DishesAutocompleteView
 
 
 

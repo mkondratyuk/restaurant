@@ -4,7 +4,6 @@
 {% load static %}
 
 {% block extrahead %}
-<!-- Додаткові стилі та бібліотеки -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/css/lightbox.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -107,7 +106,6 @@
                     <p class="card-text"><small class="text-muted">Dish: {{ review.dish }}</small></p>
                     <a href="{% url 'add_comment' review_id=review.id %}" class="btn btn-success btn-sm mt-2">Add Comment</a>
                 </div>
-                <!-- Відображення коментарів до відгуку -->
                 {% if review.comments.all %}
                 <ul class="comment-list">
                     {% for comment in review.comments.all %}

@@ -55,8 +55,8 @@ class OrderForm(forms.ModelForm):
 
 class DishForm(forms.ModelForm):
     class Meta:
-        model = Dish  # Замість цього використовуйте вашу модель страви
-        fields = ['name', 'description', 'price', 'image', 'category']  # Додайте потрібні поля форми
+        model = Dish 
+        fields = ['name', 'description', 'price', 'image', 'category']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control rounded-input',
@@ -92,12 +92,12 @@ from django import forms
 
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = Comment  # Замість цього використовуйте вашу модель коментарів
-        fields = ['text']  # Додайте потрібні поля форми
+        model = Comment  
+        fields = ['text']
         widgets = {
             'text': forms.Textarea(attrs={
                 'class': 'form-control rounded-input',
-                'rows': 5,  # кількість рядків для textarea
+                'rows': 5, 
                 'placeholder': 'Enter your comment here...'
             }),
         }
